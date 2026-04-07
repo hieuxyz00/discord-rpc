@@ -160,6 +160,23 @@ size_t JsonWriteRichPresenceObj(char* dest,
 
                 writer.Key("instance");
                 writer.Bool(presence->instance != 0);
+
+                bool has_btn1 = (presence->button1Label && presence->button1Label[0] && presence->button1Url && presence->button1Url[0]);
+                bool has_btn2 = (presence->button2Label && presence->button2Label[0] && presence->button2Url && presence->button2Url[0]);
+
+                if (has_btn1 || has_btn2) {
+                    WriteArray buttons(writer, "buttons");
+                    if (has_btn1) {
+                        WriteObject btn1(writer);
+                        WriteOptionalString(writer, "label", presence->button1Label);
+                        WriteOptionalString(writer, "url", presence->button1Url);
+                    }
+                    if (has_btn2) {
+                        WriteObject btn2(writer);
+                        WriteOptionalString(writer, "label", presence->button2Label);
+                        WriteOptionalString(writer, "url", presence->button2Url);
+                    }
+                }
             }
         }
     }
